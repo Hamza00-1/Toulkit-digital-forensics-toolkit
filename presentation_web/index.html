@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Aegis Forensics Suite - Enterprise Grade Digital Analysis, Hardware Carving, and Log Parsing.">
+    <title>Aegis Forensics Suite | Enterprise</title>
+    <link rel="stylesheet" href="styles.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@400;600;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <header class="hero">
+        <nav>
+            <div class="logo">AEGIS <span class="highlight">FORENSICS</span></div>
+            <ul class="nav-links">
+                <li><a href="#features">Architecture</a></li>
+                <li><a href="#cross-platform">Deployment</a></li>
+                <li><a href="#database">Analytics</a></li>
+                <li><a href="#download" class="btn primary">Initialize System</a></li>
+            </ul>
+        </nav>
+
+        <div class="hero-content">
+            <h1 class="glitch" data-text="Aegis Enterprise Suite">Aegis Enterprise Suite</h1>
+            <p>Industry-grade payload validation, magic-number file recovery, and deep log analysis capabilities.
+                Deployed instantly via Native Desktop or Browser Sandbox.</p>
+            <div class="cta-buttons">
+                <a href="#features" class="btn primary">Explore The Architecture</a>
+                <a href="#cross-platform" class="btn secondary">View Documentation</a>
+            </div>
+        </div>
+
+        <div class="matrix-bg"></div>
+    </header>
+
+    <section id="features" class="features">
+        <h2>Core Forensics Architecture</h2>
+        <div class="grid">
+            <div class="card fade-in">
+                <div class="icon">🔍</div>
+                <h3>Metadata Extractor (EXIF / XMP)</h3>
+                <p>Bypass the renderer. Instantly strip deep-level GPS, timestamp, and author headers from corrupted
+                    media and office documents without detonation.</p>
+            </div>
+            <div class="card fade-in delay-1">
+                <div class="icon">🛡️</div>
+                <h3>Cryptographic Validation</h3>
+                <p>Mathematical proof-of-content. Compute MD5, SHA-1, and SHA-256 signatures and automatically route
+                    them through the global VirusTotal Threat API.</p>
+            </div>
+            <div class="card fade-in delay-2">
+                <div class="icon">🖥️</div>
+                <h3>Log Anomaly Parsing</h3>
+                <p>Vector-based Syslog ingestion. Process 10,000+ line security logs via optimized regex, automatically
+                    isolating SSH brute-force vectors and rogue IPs.</p>
+            </div>
+            <div class="card fade-in delay-3">
+                <div class="icon">💾</div>
+                <h3>Raw Hexadecimal Carving</h3>
+                <p>Data resurrection. Ignore OS filesystem pointers entirely. Aegis scans binary memory dumps for magic
+                    numbers to slice and recover deleted JPEGs and PDFs.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="cross-platform" class="cross-platform">
+        <div class="split-container fade-in">
+            <div class="text-content">
+                <h2>Cross-Platform Superiority</h2>
+                <h3 class="highlight">Native FTK Desktop & Web Sandbox</h3>
+                <p>Aegis does not tie you down. Run the application via pure <strong>CustomTkinter</strong> on your
+                    primary workstation for uninhibited hard-drive access and zero-latency context routing.</p>
+                <p>Need remote access? Spin up the <strong>Flask Backend</strong>. Aegis injects a fully functional
+                    Single-Page Web Application directly into your browser, utilizing custom JS to simulate the native
+                    contextual routing.</p>
+                <ul class="feature-list">
+                    <li>✓ Interactive 3-Pane FTK Workstation Layout</li>
+                    <li>✓ Right-Click Context Routing (No repeated file uploads)</li>
+                    <li>✓ Complete UI Parity across Desktop & Web</li>
+                </ul>
+            </div>
+            <div class="visual-content">
+                <div class="fake-window">
+                    <div class="window-header">
+                        <span></span><span></span><span></span>
+                    </div>
+                    <div class="window-body">
+                        > python main_gui.py<br>
+                        [SUCCESS] Initializing Aegis Native Interface...<br>
+                        [SUCCESS] Connected to Local Database.<br>
+                        <br>
+                        > python web_app.py<br>
+                        [SUCCESS] Flask Engine Online on Port 5000...<br>
+                        [SUCCESS] Ingesting files into Workspace Sandbox.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="database" class="database">
+        <div class="about-container fade-in">
+            <h2>Live MySQL Relational Tracking</h2>
+            <p>Every hash computed, every log parsed, and every anomaly flagged is permanently indexed into a
+                centralized <strong>MySQL / MAMP</strong> architecture.</p>
+            <p>Aegis actively monitors your database connections, utilizing high-performance <code>GROUP BY</code>
+                queries to populate both your local and remote Global Dashboards instantly without costly iterative file
+                reads.</p>
+            <br>
+            <a href="#download" class="btn secondary" style="margin-top:20px;">Read The Quick-Start Guide</a>
+        </div>
+    </section>
+
+    <footer>
+        <p>AEGIS ENTERPRISE FORENSICS SUITE &copy; 2026. Built with Python, Flask, and Next-Gen Engineering.</p>
+    </footer>
+
+    <script>
+        // Smooth scroll animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.15 });
+
+        document.querySelectorAll('.fade-in').forEach((el) => observer.observe(el));
+    </script>
+</body>
+
+</html>

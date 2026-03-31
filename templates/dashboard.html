@@ -1,0 +1,76 @@
+{% extends "layout.html" %}
+
+{% block grid_title %}Global Executive Analytics{% endblock %}
+{% block grid_stats %}Total Items: {{ stats.total_files }}{% endblock %}
+
+{% block data_grid %}
+<div class="p-4 grid grid-cols-2 gap-4 h-full">
+
+    <!-- KPI Table -->
+    <div class="h-full border border-ftk-border">
+        <table class="ftk-table">
+            <thead>
+                <tr>
+                    <th class="w-2/3">Metric Name</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="font-semibold text-ftk-accent">Database State</td>
+                    <td class="text-green-600 font-bold">ONLINE / SYNCED</td>
+                </tr>
+                <tr>
+                    <td class="font-semibold">Gross Processed Artifacts</td>
+                    <td class="font-mono">{{ stats.total_files }}</td>
+                </tr>
+                <tr>
+                    <td class="font-semibold">Threat Vectors Flagged</td>
+                    <td class="font-mono {% if stats.anomalies > 0 %}text-red-500 font-bold{% endif %}">{{
+                        stats.anomalies }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="p-2 mt-4 text-xs text-ftk-muted">
+            <p><strong>Note:</strong> Select a module from the top ribbon to begin processing explicit artifacts.
+                Dashboard updates passively on browser refresh.</p>
+        </div>
+    </div>
+
+    <!-- Detailed Execution Log -->
+    <div class="h-full border border-ftk-border overflow-auto">
+        <table class="ftk-table">
+            <thead>
+                <tr>
+                    <th>Timestamp</th>
+                    <th>Target Module</th>
+                    <th>Result State</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for event in stats.raw_events|reverse %}
+                <tr>
+                    <td class="font-mono text-xs">{{ event.timestamp }}</td>
+                    <td>{{ event.module }}</td>
+                    <td class="{% if 'Danger' in event.status %}text-red-600 font-bold{% endif %}">{{ event.status }}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block raw_viewer %}
+[AEGIS GLOBAL LOGS]
+======================================================
+System online. Connected to Local Activity Database.
+Total Indexed Forensic Events: {{ stats.raw_events|length }}
+======================================================
+{% for event in stats.raw_events|reverse %}
+[{{ event.timestamp }}] TRIGGERED: {{ event.module }} | FLAG: {{ event.status }} | Target: {{ event.file }}
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aegis Enterprise | FTK Layout</title>
+    <!-- Tailwind for rapid high density deployment -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ftk: {
+                            bg: '#f1f5f9',       // Light gray app background
+                            panel: '#ffffff',    // White panels
+                            border: '#cbd5e1',   // Distinct borders
+                            header: '#e2e8f0',   // Panel header backgrounds
+                            text: '#0f172a',     // Dark text
+                            muted: '#64748b',    // Muted text
+                            accent: '#4682b4',   // Steel blue focus
+                            danger: '#dc2626',   // Red warnings
+                        }
+                    },
+                    fontSize: {
+                        'xxs': '0.65rem',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Strict Enterprise Typography & Scrollbars */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f1f5f9;
+            color: #0f172a;
+            overflow: hidden;
+            /* No global scroll */
+        }
+
+        .panel {
+            background-color: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-radius: 2px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .panel-header {
+            background-color: #e2e8f0;
+            border-bottom: 1px solid #cbd5e1;
+            padding: 4px 8px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #334155;
+        }
+
+        .panel-content {
+            flex: 1;
+            overflow: auto;
+            padding: 4px;
+            font-size: 0.8rem;
+        }
+
+        /* Modern thin scrollbars */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Custom Data Table styling */
+        .ftk-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        .ftk-table th {
+            background-color: #f8fafc;
+            border-bottom: 1px solid #cbd5e1;
+            border-right: 1px solid #e2e8f0;
+            padding: 4px 8px;
+            font-weight: 600;
+            font-size: 0.75rem;
+            position: sticky;
+            top: 0;
+        }
+
+        .ftk-table td {
+            border-bottom: 1px solid #e2e8f0;
+            border-right: 1px solid #e2e8f0;
+            padding: 4px 8px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 300px;
+        }
+
+        .ftk-table tr:hover {
+            background-color: #f0f9ff;
+            cursor: pointer;
+        }
+
+        .nav-btn {
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 4px 12px;
+            border: 1px solid transparent;
+            border-radius: 2px;
+        }
+
+        .nav-btn:hover {
+            background-color: #e2e8f0;
+            border-color: #cbd5e1;
+        }
+
+        /* Hex Viewer Simulator */
+        .hex-view {
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 0.75rem;
+            white-space: pre-wrap;
+            background-color: #0f172a;
+            color: #38bdf8;
+            padding: 8px;
+        }
+    </style>
+</head>
+
+<body class="h-screen w-screen flex flex-col">
+
+    <!-- Top Ribbon / Toolbar -->
+    <header class="h-12 bg-white border-b border-ftk-border flex items-center justify-between px-2 flex-shrink-0">
+        <div class="flex items-center space-x-4">
+            <span class="font-bold text-ftk-accent text-sm tracking-wide ml-2">AEGIS FORENSICS</span>
+            <div class="h-6 w-px bg-ftk-border mx-2"></div>
+            <!-- Tools -->
+            <a href="/" class="nav-btn text-ftk-text">Dashboard</a>
+            <a href="/metadata" class="nav-btn text-ftk-text">Load Evidence (EXIF)</a>
+            <a href="/logs" class="nav-btn text-ftk-text">Parse Syslogs</a>
+            <a href="/hasher" class="nav-btn text-ftk-text">Cryptographic Hasher</a>
+            <a href="/decoder" class="nav-btn text-ftk-text">Decode Strings</a>
+            <!-- Recovery natively requires desktop for direct drive access, removed from Web Ribbon -->
+        </div>
+
+        <div class="flex items-center text-xs text-ftk-muted pr-4 font-semibold">
+            <span class="w-2 h-2 rounded-full bg-green-500 mr-2"></span> Database Connected
+        </div>
+    </header>
+
+    <!-- 3-Pane Workstation Splitter -->
+    <main class="flex-1 flex overflow-hidden p-1 gap-1 bg-ftk-bg">
+
+        <!-- Left Pane: Evidence Tree -->
+        <aside class="w-64 flex-shrink-0 panel">
+            <div class="panel-header">Evidence Explorer</div>
+            <div class="panel-content bg-white p-2">
+
+                <!-- Workspace Files (Uploads Dir) -->
+                <div class="mb-2">
+                    <button onclick="toggleTree('tree-workspace')"
+                        class="flex items-center text-xs font-bold text-ftk-text w-full text-left focus:outline-none">
+                        <span id="icon-workspace" class="mr-1 w-3 text-center">▾</span> 📁 Workspace Buffer
+                    </button>
+                    <ul id="tree-workspace"
+                        class="ml-4 border-l border-dotted border-gray-300 pl-2 space-y-1 mt-1 transition-all">
+                        {% if workspace_files %}
+                        {% for file in workspace_files %}
+                        <li class="flex items-center text-ftk-text text-xxs cursor-context-menu hover:bg-gray-100 px-1 py-0.5"
+                            oncontextmenu="showContextMenu(event, '{{ file }}')">
+                            <span class="mr-1 text-gray-400">📄</span> {{ file }}
+                        </li>
+                        {% endfor %}
+                        {% else %}
+                        <li class="text-gray-400 text-xxs italic">No files buffered...</li>
+                        {% endif %}
+                    </ul>
+                </div>
+
+                <!-- Processed Targets (MySQL DB) -->
+                <div class="mb-2 mt-4">
+                    <button onclick="toggleTree('tree-processed')"
+                        class="flex items-center text-xs font-bold text-ftk-text w-full text-left focus:outline-none">
+                        <span id="icon-processed" class="mr-1 w-3 text-center">▾</span> 🎯 DB Processed Targets
+                    </button>
+                    <ul id="tree-processed"
+                        class="ml-4 border-l border-dotted border-gray-300 pl-2 space-y-1 mt-1 transition-all">
+                        {% if processed_targets %}
+                        {% for file in processed_targets %}
+                        <li class="flex items-center text-ftk-accent text-xxs cursor-context-menu hover:bg-gray-100 px-1 py-0.5"
+                            oncontextmenu="showContextMenu(event, '{{ file }}')">
+                            <span class="mr-1 text-ftk-accent">✓</span> {{ file }}
+                        </li>
+                        {% endfor %}
+                        {% else %}
+                        <li class="text-gray-400 text-xxs italic">No DB records found...</li>
+                        {% endif %}
+                    </ul>
+                </div>
+
+                <div class="mt-4 border-t border-ftk-border pt-4">
+                    <p class="text-xxs text-ftk-muted uppercase tracking-wider mb-2">System Status</p>
+                    <p class="text-xs">Database Synced: MySQL</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Custom Context Menu (Hidden by Default) -->
+        <div id="context-menu"
+            class="hidden absolute z-50 w-48 bg-ftk-bg border border-ftk-border shadow-lg rounded-sm py-1 text-xs font-medium text-ftk-text">
+            <div class="px-3 py-1 bg-ftk-header text-ftk-muted border-b border-ftk-border font-bold text-xxs mb-1 truncate"
+                id="context-file-name">Target</div>
+            <button onclick="submitContext('/metadata')"
+                class="w-full text-left px-4 py-1.5 hover:bg-ftk-accent hover:text-white transition-colors">Send to:
+                Metadata (EXIF)</button>
+            <button onclick="submitContext('/hasher')"
+                class="w-full text-left px-4 py-1.5 hover:bg-ftk-accent hover:text-white transition-colors">Send to:
+                Hasher Core</button>
+            <button onclick="submitContext('/logs')"
+                class="w-full text-left px-4 py-1.5 hover:bg-ftk-accent hover:text-white transition-colors">Send to:
+                Syslog Parser</button>
+        </div>
+
+        <!-- Hidden form for Context Menu submission -->
+        <form id="context-form" method="POST" class="hidden">
+            <input type="hidden" name="server_file" id="context-server-file" value="">
+        </form>
+
+        <!-- Context Menu Flow Logic -->
+        <script>
+            let selectedFile = "";
+
+            function toggleTree(treeId) {
+                const el = document.getElementById(treeId);
+                const idName = treeId.split('-')[1];
+                const icon = document.getElementById('icon-' + idName);
+                if (el.classList.contains('hidden')) {
+                    el.classList.remove('hidden');
+                    icon.textContent = "▾";
+                } else {
+                    el.classList.add('hidden');
+                    icon.textContent = "▸";
+                }
+            }
+
+            function showContextMenu(event, filename) {
+                event.preventDefault();
+                selectedFile = filename;
+
+                const menu = document.getElementById('context-menu');
+                document.getElementById('context-file-name').textContent = "Target: " + filename;
+
+                menu.style.display = 'block';
+                menu.style.left = event.pageX + 'px';
+                menu.style.top = event.pageY + 'px';
+                menu.classList.remove('hidden');
+            }
+
+            function submitContext(route) {
+                const form = document.getElementById('context-form');
+                document.getElementById('context-server-file').value = selectedFile;
+                form.action = route;
+                hideContextMenu();
+                form.submit();
+            }
+
+            function hideContextMenu() {
+                const menu = document.getElementById('context-menu');
+                menu.style.display = 'none';
+                menu.classList.add('hidden');
+            }
+
+            // Hide context menu when clicking anywhere else
+            document.addEventListener('click', function (e) {
+                if (e.target.id !== 'context-menu') {
+                    hideContextMenu();
+                }
+            });
+        </script>
+
+        <!-- Right Region: Vertical Split (Data Grid over Viewer) -->
+        <section class="flex-1 flex flex-col gap-1 overflow-hidden">
+
+            <!-- Top Right Pane: Data Grid (Dynamic Content Block) -->
+            <div class="flex-[3] panel">
+                <div class="panel-header flex justify-between">
+                    <span>{% block grid_title %}Data Grid Viewer{% endblock %}</span>
+                    <span class="text-ftk-muted font-normal">{% block grid_stats %}{% endblock %}</span>
+                </div>
+                <div class="panel-content relative p-0">
+                    {% block data_grid %}{% endblock %}
+                </div>
+            </div>
+
+            <!-- Bottom Right Pane: Raw Detail Viewer -->
+            <div class="flex-[2] panel">
+                <div class="panel-header">Raw Attribute / Hex Viewer</div>
+                <div class="panel-content hex-view overflow-auto">
+                    {% block raw_viewer %}[SYSTEM] Aegis Analytical Engine online.
+                    Awaiting evidence ingestion...{% endblock %}
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+</body>
+
+</html>

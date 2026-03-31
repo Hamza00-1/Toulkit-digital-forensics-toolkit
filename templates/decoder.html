@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+
+{% block grid_title %}Evidence: Cryptography Translation{% endblock %}
+{% block grid_stats %}Status: {% if result %}Translated{% else %}Waiting Input{% endif %}{% endblock %}
+
+{% block data_grid %}
+<div class="h-16 border-b border-ftk-border p-2 bg-gray-50 flex items-center justify-between">
+    <form method="POST" class="flex items-center space-x-3 w-full">
+        <label class="text-xs font-semibold text-ftk-muted">Input Hex/Base64/Bin:</label>
+
+        <input type="text" name="raw_text" required placeholder="Raw string..."
+            class="h-7 px-2 border border-ftk-border rounded-sm text-xs w-64 focus:outline-none focus:border-ftk-accent font-mono bg-white">
+
+        <select name="enc_type"
+            class="h-7 px-2 border border-ftk-border rounded-sm text-xs focus:outline-none bg-white font-semibold">
+            <option value="Base64">Base64</option>
+            <option value="Hex">Hexadecimal</option>
+            <option value="Binary">Binary</option>
+        </select>
+
+        <button type="submit"
+            class="px-4 py-1.5 bg-ftk-accent text-white text-xs font-semibold rounded-sm hover:bg-blue-600 shadow-sm border border-blue-700">Translate</button>
+    </form>
+</div>
+
+<div class="h-[calc(100%-4rem)] overflow-auto bg-white p-4">
+    {% if result %}
+    <p class="text-xs font-bold text-ftk-muted uppercase mb-2 border-b border-gray-200 pb-1">ASCII Conversion Result:
+    </p>
+    <pre
+        class="font-mono text-sm whitespace-pre-wrap break-words {% if result.startswith('Error') %}text-red-600 font-bold{% else %}text-green-700{% endif %}">{{ result }}</pre>
+    {% else %}
+    <div class="flex items-center justify-center h-full text-ftk-muted text-xs">
+        <p>No string loaded into translation matrix.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block raw_viewer %}
+{% if result %}
+[AEGIS DECODER ENGINE]
+Input String Processed.
+Translation State: {% if result.startswith('Error') %}FAIL{% else %}SUCCESS{% endif %}
+{% else %}
+[SYSTEM] Decoder matrix active.
+Awaiting manual string transmission...
+{% endif %}
+{% endblock %}

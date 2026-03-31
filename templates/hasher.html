@@ -1,0 +1,111 @@
+{% extends "layout.html" %}
+
+{% block grid_title %}Evidence: Cryptographic Signatures{% endblock %}
+{% block grid_stats %}Algorithm Scope: MD5, SHA-1, SHA-256{% endblock %}
+
+{% block data_grid %}
+<div class="h-[4.5rem] border-b border-ftk-border p-2 bg-gray-50 flex flex-col justify-center space-y-1">
+    <form method="POST" enctype="multipart/form-data" class="flex items-center space-x-3 w-full">
+        <input type="file" name="file" required class="text-xs text-gray-700
+            file:mr-2 file:py-1 file:px-2 file:border file:border-ftk-border file:rounded-sm
+            file:text-xs file:font-semibold file:bg-white file:text-ftk-text
+            hover:file:bg-gray-100 cursor-pointer w-64">
+
+        <input type="password" name="vt_key" placeholder="Optional: VirusTotal API Key"
+            class="h-7 px-2 border border-ftk-border rounded-sm text-xs w-48 focus:outline-none focus:border-ftk-accent">
+
+        <button type="submit"
+            class="px-4 py-1.5 bg-ftk-accent text-white text-xs font-semibold rounded-sm hover:bg-blue-600 shadow-sm border border-blue-700">Compute
+            Strings</button>
+    </form>
+</div>
+
+<div class="h-[calc(100%-4.5rem)] overflow-auto bg-white">
+    {% if result %}
+    <table class="ftk-table w-full">
+        <thead>
+            <tr>
+                <th class="w-48">Cryptographic Standard</th>
+                <th>Generated Constant Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if result.Error %}
+            <tr>
+                <td colspan="2" class="text-red-500 font-mono">{{ result.Error }}</td>
+            </tr>
+            {% elif result.Hashes %}
+            {% for algo, hval in result.Hashes.items() %}
+            <tr>
+                <td class="font-bold text-xs">{{ algo }}</td>
+                <td class="font-mono text-xs text-blue-800">{{ hval }}</td>
+            </tr>
+            {% endfor %}
+            {% endif %}
+
+            {% if result.VirusTotal %}
+            <tr class="bg-gray-100">
+                <td colspan="2" class="font-bold text-xs text-center border-b border-gray-300">VirusTotal Remote
+                    Validation</td>
+            </tr>
+            {% if result.VirusTotal.Error %}
+            <tr>
+                <td class="font-bold text-xs">API Status</td>
+                <td class="font-mono text-xs text-red-500">{{ result.VirusTotal.Error }}</td>
+            </tr>
+            {% elif result.VirusTotal.Status == 'Not Found' %}
+            <tr>
+                <td class="font-bold text-xs">API Status</td>
+                <td class="font-mono text-xs text-yellow-600">Miss: Hash unique bounding box. Zero hits identified.</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td class="font-bold text-xs">Verdict Classification</td>
+                <td
+                    class="font-mono text-xs font-bold {% if result.VirusTotal.Verdict == 'DANGER' %}text-red-600{% else %}text-green-600{% endif %}">
+                    [{{ result.VirusTotal.Verdict }}]
+                </td>
+            </tr>
+            <tr>
+                <td class="font-bold text-xs text-red-500">Malicious Engines</td>
+                <td class="font-mono text-xs text-red-600 font-bold">{{ result.VirusTotal.Malicious }}</td>
+            </tr>
+            <tr>
+                <td class="font-bold text-xs text-yellow-600">Suspicious Engines</td>
+                <td class="font-mono text-xs text-yellow-600">{{ result.VirusTotal.Suspicious }}</td>
+            </tr>
+            <tr>
+                <td class="font-bold text-xs text-gray-500">Undetected Engines</td>
+                <td class="font-mono text-xs text-gray-500">{{ result.VirusTotal.Undetected }}</td>
+            </tr>
+            {% endif %}
+            {% endif %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="flex items-center justify-center h-full text-ftk-muted text-xs">
+        <p>No payload loaded into memory.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block raw_viewer %}
+{% if result %}
+[AEGIS CRYPTOGRAPHIC ENGINE]
+Input Stream Processed.
+
+{% if result.Hashes %}
+RAW OUTPUT STREAM:
+{{ result.Hashes | tojson(indent=4) }}
+{% endif %}
+
+{% if result.VirusTotal %}
+API V3 VALIDATION STREAM:
+{{ result.VirusTotal | tojson(indent=4) }}
+{% endif %}
+{% else %}
+[SYSTEM] Cryptographic bounds ready.
+Load file and optional API key to process arrays...
+{% endif %}
+{% endblock %}

@@ -1,0 +1,63 @@
+# =============================================================================
+# Aegis Forensics Suite — .gitignore
+# =============================================================================
+
+# ── Python ────────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+*.whl
+
+# ── Virtual Environments ──────────────────────────────────────────────────────
+venv/
+.venv/
+env/
+ENV/
+
+# ── Uploads & Runtime Data ────────────────────────────────────────────────────
+uploads/
+*.db
+activity_db.json
+
+# ── Test & Evidence Artifacts ─────────────────────────────────────────────────
+test_files/
+Phase_1_Submission/test_evidence/
+Phase_1_Submission/__pycache__/
+
+# ── Archives ───────────────────────────────────────────────────────────────────
+*.zip
+*.tar.gz
+*.rar
+
+# ── OS & Editor ────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.idea/
+.vscode/
+*.suo
+*.user
+
+# ── Secrets ────────────────────────────────────────────────────────────────────
+.env
+.env.*
+secrets.json
+config.local.py
+
+# ── Logs ───────────────────────────────────────────────────────────────────────
+*.log
+logs/
+
+# ── WhatsApp / misc media ──────────────────────────────────────────────────────
+*.jpeg
+*.jpg
+*.png
+!docs/screenshots/*.png
+!docs/screenshots/*.jpg
