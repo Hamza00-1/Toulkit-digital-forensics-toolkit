@@ -45,6 +45,44 @@ It ships in two modes:
 
 Both interfaces share a common MySQL backend for persistent activity logging and analytics.
 
+### Architecture Schema
+
+```mermaid
+graph TD
+    %% Core Users
+    User((Investigator))
+
+    %% Interfaces
+    subgraph UI [User Interfaces]
+        Desktop[Native Desktop Client<br/>CustomTkinter]
+        Web[Web Application<br/>Flask]
+    end
+
+    %% Routing
+    User -->|Interacts| Desktop
+    User -->|Interacts| Web
+
+    %% Backend engines
+    subgraph Core [Forensic Engines]
+        Meta[Metadata Extractor<br/>ExifRead / PyMuPDF]
+        Log[Log Analyzer<br/>Pandas / Regex]
+        Carve[File Carver<br/>Binary Magic Numbers]
+        Hash[Cryptographic Hasher<br/>MD5 / SHA]
+        Decode[String Decoder<br/>Base64 / Hex / Bin]
+    end
+
+    %% External
+    VT[VirusTotal API v3]
+    DB[(MySQL Database<br/>Activity Logging)]
+
+    %% Connections
+    Desktop -->|Routes payload| Core
+    Web -->|Routes payload| Core
+    
+    Core -.->|Logs Activity| DB
+    Hash -.->|Queries| VT
+```
+
 ---
 
 ## Features
@@ -97,14 +135,6 @@ aegis-forensics-suite/
 │   └── presentation_web/       # Static HTML/CSS project presentation
 │       ├── index.html
 │       └── styles.css
-│
-├── 📖 Phase Submissions
-│   └── Phase_1_Submission/     # University Phase 1 milestone
-│       ├── README.md
-│       ├── main_gui.py         # Phase 1 GUI snapshot
-│       ├── metadata_module.py  # Phase 1 module snapshot
-│       ├── generate_evidence.py
-│       └── requirements.txt
 │
 ├── 📜 requirements.txt         # Python dependencies
 ├── 📜 USER_GUIDE.md            # Full user documentation
@@ -254,14 +284,10 @@ python generate_test_files.py
 
 ---
 
-## Roadmap
+## Future Enhancements (V2)
 
-- [x] **Phase 1** — GUI Architecture + Metadata Engine
-- [x] **Phase 2** — Log Analytics + Hex Carving / File Recovery
-- [x] **Phase 3** — Cryptographic Hashing + VirusTotal API
-- [x] **Phase 4** — MySQL Backend + Flask Web Application
-- [ ] **Phase 5** — Report Generation (PDF export of investigation findings)
-- [ ] **Phase 6** — Timeline Reconstruction (cross-module activity correlation)
+- **Report Generation:** Automated PDF export of investigation findings and executive summaries.
+- **Timeline Reconstruction:** Advanced cross-module activity correlation to visually graph suspect behavior.
 
 ---
 
