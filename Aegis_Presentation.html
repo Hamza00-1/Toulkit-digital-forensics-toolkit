@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Aegis Digital Forensics Toolkit Presentation</title>
+    <meta name="description" content="Aegis Digital Forensics Toolkit Presentation">
+    <meta name="author" content="Your Name">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Reveal.js core CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+    
+    <!-- Professional Theme -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/league.min.css" id="theme">
+
+    <style>
+        .reveal h1, .reveal h2, .reveal h3 {
+            color: #3b82f6; /* Cyber Blue */
+            text-transform: none;
+        }
+        .reveal .slides section p, .reveal .slides section li {
+            text-align: left;
+            font-size: 0.8em;
+            line-height: 1.5;
+        }
+        .highlight {
+            color: #ef4444; /* Alert Red */
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="reveal">
+        <div class="slides">
+            
+            <!-- Slide 1: Title -->
+            <section>
+                <h1>Aegis Digital Forensics</h1>
+                <h3>An Enterprise-Grade, Dual-Architecture Triage Suite</h3>
+                <p style="text-align: center; margin-top: 50px;">
+                    Presented for the Department of Cybersecurity & Software Engineering
+                </p>
+                <p style="text-align: center; font-size: 0.6em; margin-top: 20px; color: #aaa;">
+                    (Press SPACE to advance, or ESC to view all slides. Press CTRL+P to Print to PDF)
+                </p>
+            </section>
+
+            <!-- Slide 2: The Challenge -->
+            <section>
+                <h2>1. The Challenge in Modern Forensics</h2>
+                <ul>
+                    <li><span class="highlight">Scale & Noise:</span> Investigators must manually parse thousands of log lines and hidden metadata tags.</li>
+                    <li><span class="highlight">Data Mutilation:</span> Suspects format drives, delete files, and obfuscate payloads to hide tracks.</li>
+                    <li><span class="highlight">Collaboration Bottlenecks:</span> Heavy offline processing environments make remote reporting and stakeholder updates difficult.</li>
+                </ul>
+                <p style="margin-top: 30px;">
+                    <em>Goal: A solution that balances heavy offline processing with agile, secure reporting.</em>
+                </p>
+            </section>
+
+            <!-- Slide 3: Architecture -->
+            <section>
+                <h2>2. Aegis Architecture: Desktop vs. Web</h2>
+                <div style="display: flex; justify-content: space-between;">
+                    <div style="width: 48%;">
+                        <h4>Python Desktop Client (Offline)</h4>
+                        <ul>
+                            <li>Built with CustomTkinter for a responsive, modern UI.</li>
+                            <li>Deep OS integration for raw byte carving.</li>
+                            <li>Ensures evidence never leaks to the internet.</li>
+                        </ul>
+                    </div>
+                    <div style="width: 48%;">
+                        <h4>Flask Web Dashboard (Remote)</h4>
+                        <ul>
+                            <li>Accessible via browser for non-technical managers.</li>
+                            <li>Triage reports and analytics.</li>
+                            <li>Secure RESTful API mapping.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Slide 4: Integrity -->
+            <section>
+                <h2>3. Integrity & Chain of Custody</h2>
+                <p><strong>Principle:</strong> If evidence is altered without a log, it is inadmissible in court.</p>
+                <ul>
+                    <li>Every action (metadata extraction, hashing, carving) triggers an automated <code>INSERT</code> into a secure MySQL Activity Tracker Database.</li>
+                    <li>Captures timestamps, target files, success states, and the specific module used.</li>
+                    <li>Creates an immutable, mathematically sound audit trail for the investigator.</li>
+                </ul>
+            </section>
+
+            <!-- Slide 5: Validation -->
+            <section>
+                <h2>4. Validation Over Trust: Threat Intel</h2>
+                <ul>
+                    <li><span class="highlight">Mathematical Proof:</span> Utilizes the <code>hashlib</code> library to compute MD5, SHA-1, and SHA-256 signatures in safe chunks, guaranteeing file integrity.</li>
+                    <li><span class="highlight">Global Threat Intelligence:</span> Integrates directly with the <strong>VirusTotal API</strong>.</li>
+                    <li>Instead of relying on local assumptions, we query global heuristic databases to flag known malware (like the EICAR test string) instantly.</li>
+                </ul>
+            </section>
+
+            <!-- Slide 6: Automation -->
+            <section>
+                <h2>5. Automating the Triage</h2>
+                <p>The Sentinel Syslog Abstractor minimizes human error:</p>
+                <ul>
+                    <li><strong>Regex Pattern Matching:</strong> We utilize the <code>re</code> library to extract timestamps, hostnames, and messages from standard <code>auth.log</code> formats.</li>
+                    <li><strong>Data Structuring:</strong> We map this unstructured text into <strong>Pandas DataFrames</strong>.</li>
+                    <li><strong>Anomaly Detection:</strong> The system automatically flags IPs with multiple failed SSH login attempts, highlighting brute-force vectors without manual reading.</li>
+                </ul>
+            </section>
+
+            <!-- Slide 7: Recovery -->
+            <section>
+                <h2>6. Navigating the Messy Reality</h2>
+                <p>Digital evidence is rarely pristine. Aegis includes tools for recovering damaged data:</p>
+                <ul>
+                    <li><strong>Hexadecimal Data Carving:</strong> Bypasses corrupted file systems entirely. Scans raw memory dumps and byte-streams to isolate files using explicitly defined "Magic Headers".</li>
+                    <li><strong>Payload Decoder Matrix:</strong> Translates suspicious Base64, Hexadecimal, and Binary strings back into human-readable text using <code>binascii</code>.</li>
+                </ul>
+            </section>
+
+            <!-- Slide 8: Demo & QA -->
+            <section>
+                <h2>Live Demonstration Environment</h2>
+                <ol>
+                    <li>Metadata Extraction (EXIF)</li>
+                    <li>Cryptographic Validation (EICAR Malware String)</li>
+                    <li>Automated Log Abstraction (Pandas / Regex)</li>
+                    <li>Global Executive Dashboard Overview</li>
+                </ol>
+                <h3 style="margin-top: 50px;">Questions & Answers</h3>
+            </section>
+
+        </div>
+    </div>
+
+    <!-- Reveal.js Core Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+    <script>
+        Reveal.initialize({
+            hash: true,
+            transition: 'slide',
+            slideNumber: 'c/t',
+            pdfSeparateFragments: false
+        });
+    </script>
+</body>
+</html>

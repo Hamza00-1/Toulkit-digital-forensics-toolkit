@@ -42,7 +42,7 @@ class ToolkitApp(ctk.CTk):
         self.text_primary = ("#0f172a", "#f8fafc")      # Pure White text
         self.text_secondary = ("#64748b", "#94a3b8")    # Muted Gray text
 
-        self.vt_api_key = ""
+        self.vt_api_key = "1297478004b0fb714e6d7c183d8865b54390b9aff031b9193d0ac1dc5caeb1cf"
         self.loaded_workspace_files = []
 
         self.configure(fg_color=self.bg_color)

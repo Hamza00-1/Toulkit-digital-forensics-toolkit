@@ -1,0 +1,183 @@
+\documentclass[aspectratio=169]{beamer}
+
+% Theme selection
+\usetheme{metropolis} % A clean, modern, professional theme
+\usecolortheme{spruce} % Gives a nice, academic/cybersecurity dark green/grey feel
+
+% Packages
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{xcolor}
+
+% Custom Colors
+\definecolor{CyberBlue}{RGB}{59, 130, 246}
+\definecolor{CyberDark}{RGB}{15, 23, 42}
+
+% Title Slide Information
+\title{Aegis Digital Forensics Toolkit}
+\subtitle{An Enterprise-Grade, Dual-Architecture Triage Suite}
+\date{\today}
+\author{Presented by: [Your Name/Team]}
+\institute{Department of Cybersecurity \& Software Engineering}
+
+\begin{document}
+
+% ---------------------------------------------------
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% ---------------------------------------------------
+\begin{frame}{Agenda}
+    \tableofcontents
+\end{frame}
+
+% ---------------------------------------------------
+\section{The Challenge in Modern Forensics}
+
+\begin{frame}{The Challenge in Modern Forensics}
+    \textbf{Digital investigations face three critical bottlenecks:}
+    \vspace{0.5cm}
+    \begin{enumerate}
+        \item \textbf{Scale \& Noise:} Investigators must manually parse thousands of log lines and hidden metadata tags.
+        \item \textbf{Data Mutilation:} Suspects format drives, delete files, and obfuscate payloads to hide tracks.
+        \item \textbf{Collaboration Bottlenecks:} Heavy offline processing environments make remote reporting and stakeholder updates difficult.
+    \end{enumerate}
+    \vspace{0.5cm}
+    \textit{We need a solution that balances heavy offline processing with agile, secure reporting.}
+\end{frame}
+
+% ---------------------------------------------------
+\section{Aegis Architecture: Desktop vs. Web}
+
+\begin{frame}{Dual-Layered Architecture}
+    Our toolkit is purposely built across two distinct environments:
+    
+    \vspace{0.3cm}
+    \begin{columns}
+        \column{0.45\textwidth}
+        \textbf{1. Python Desktop Client (Offline)}
+        \begin{itemize}
+            \item Built with \texttt{CustomTkinter}.
+            \item Deep OS integration for raw byte carving and offline processing.
+            \item Ensures evidence never accidentally leaks to the internet.
+        \end{itemize}
+        
+        \column{0.45\textwidth}
+        \textbf{2. Flask Web Dashboard (Remote)}
+        \begin{itemize}
+            \item Accessible via browser for non-technical managers.
+            \item Read-only views and triage reports.
+            \item Secure RESTful API structure.
+        \end{itemize}
+    \end{columns}
+\end{frame}
+
+% ---------------------------------------------------
+\section{Integrity \& Chain of Custody}
+
+\begin{frame}{Integrity \& Chain of Custody}
+    \textbf{Principle:} \textit{If evidence is altered without a log, it is inadmissible in court.}
+    
+    \vspace{0.5cm}
+    To guarantee forensic integrity, Aegis implements an \textbf{Activity Tracker Database}:
+    \begin{itemize}
+        \item Every action (metadata extraction, hashing, carving) triggers an automated \texttt{INSERT} into a secure MySQL environment.
+        \item Captures timestamps, target files, success states, and the specific module used.
+        \item Creates an immutable audit trail for the investigator.
+    \end{itemize}
+\end{frame}
+
+% ---------------------------------------------------
+\section{Validation Over Trust: Hash \& Threat Intel}
+
+\begin{frame}{Validation Over Trust}
+    \textbf{The Cryptographic Validator Module}
+    \vspace{0.3cm}
+    
+    \begin{columns}
+        \column{0.5\textwidth}
+        \textbf{Mathematical Proof}
+        \begin{itemize}
+            \item Utilizes the \texttt{hashlib} library to compute MD5, SHA-1, and SHA-256 signatures in safe, 8192-byte chunks.
+        \end{itemize}
+        
+        \column{0.5\textwidth}
+        \textbf{Global Threat Intelligence}
+        \begin{itemize}
+            \item Integrates directly with the \textbf{VirusTotal API}.
+            \item Instead of relying on local assumptions, we query global heuristic databases to flag known malware instantly.
+        \end{itemize}
+    \end{columns}
+\end{frame}
+
+% ---------------------------------------------------
+\section{Automating the Triage: Syslog Abstractor}
+
+\begin{frame}{Automating the Triage}
+    \textbf{The Sentinel Syslog Abstractor}
+    \vspace{0.3cm}
+    
+    Manual log analysis is prone to human error. Aegis automates this:
+    \begin{itemize}
+        \item \textbf{Regex Pattern Matching:} We utilize the \texttt{re} library to extract timestamps, hostnames, and messages from standard \texttt{auth.log} formats.
+        \item \textbf{Data Structuring:} We map this unstructured text into \textbf{Pandas DataFrames}.
+        \item \textbf{Anomaly Detection:} The system mathematically flags IPs with multiple failed SSH login attempts, immediately highlighting brute-force vectors.
+    \end{itemize}
+\end{frame}
+
+% ---------------------------------------------------
+\section{Navigating the Messy Reality}
+
+\begin{frame}{Navigating the Messy Reality}
+    Digital evidence is rarely pristine. Aegis includes specialized tools for recovering damaged data:
+    
+    \vspace{0.5cm}
+    \textbf{1. Hexadecimal Data Carving}
+    \begin{itemize}
+        \item Bypasses corrupted file systems entirely.
+        \item Scans raw memory dumps and byte-streams to isolate files using explicitly defined "Magic Headers".
+    \end{itemize}
+    
+    \vspace{0.3cm}
+    \textbf{2. Payload Decoder Matrix}
+    \begin{itemize}
+        \item Translates suspicious Base64, Hexadecimal, and Binary strings back into human-readable plain text using \texttt{binascii}.
+    \end{itemize}
+\end{frame}
+
+% ---------------------------------------------------
+\section{Live Demonstration}
+
+\begin{frame}{Live Demonstration}
+    \begin{center}
+        \Large \textbf{Live Environment Demonstration}
+        
+        \vspace{0.5cm}
+        \normalsize
+        1. Metadata Extraction (EXIF)\\
+        2. Cryptographic Validation (EICAR Malware String)\\
+        3. Automated Log Abstraction\\
+        4. Global Executive Dashboard
+    \end{center}
+\end{frame}
+
+% ---------------------------------------------------
+\section{Conclusion}
+
+\begin{frame}{Conclusion}
+    \textbf{Summary:}
+    Aegis is not just a collection of scripts; it is an engineered, forensically-sound toolkit. 
+    
+    \vspace{0.5cm}
+    By prioritizing \textbf{Chain of Custody}, \textbf{Automation}, and \textbf{Mathematical Validation}, Aegis allows investigators to focus on solving the case rather than fighting their tools.
+    
+    \vspace{1cm}
+    \begin{center}
+        \Large \textbf{Questions \& Answers}
+    \end{center}
+\end{frame}
+
+\end{document}
